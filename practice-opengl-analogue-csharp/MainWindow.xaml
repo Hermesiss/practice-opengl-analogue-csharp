@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:practice_opengl_analogue_csharp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="600" Width="600" Background='White'>
     <Grid>
-        
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Dot" MinWidth="100" Click="newTextureBtn_Click"/>
+                <Button Content="Line" MinWidth="100" Click="DrawLineBtn_OnClickBtn_Click"/>
+            </StackPanel>    
+        </StackPanel>
+        <Image x:Name="RenderImage" Height="512" Width="512" Source="Images/missing.jpg" HorizontalAlignment="Center"
+               VerticalAlignment="Center" />
     </Grid>
 </Window>
