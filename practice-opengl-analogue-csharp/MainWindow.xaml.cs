@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Extensions;
+using JeremyAnsel.Media.WavefrontObj;
 using Color = System.Drawing.Color;
 using Image = System.Windows.Controls.Image;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
@@ -21,6 +22,7 @@ namespace practice_opengl_analogue_csharp {
         private Bitmap _bitmap;
 
         public MainWindow() {
+            ConsoleAllocator.ShowConsoleWindow();
             InitializeComponent();
             _image = RenderImage;
             RenderOptions.SetBitmapScalingMode(RenderImage, BitmapScalingMode.HighQuality);
@@ -43,6 +45,30 @@ namespace practice_opengl_analogue_csharp {
                     new Vector2(_random.Next(Size), _random.Next(Size)), RandomColor());
         }
 
+        private void DrawModelWireframe() {
+            var m = ObjFile.FromFile("Models/icosahedron.obj");
+
+            var bounds = m.Bounds();
+            var scale = _bitmap.Width / bounds.BiggestSize();
+
+            foreach (var face in m.Faces) {
+                var indicesCount = face.Vertices.Count;
+
+                for (var i = 0; i < indicesCount; i++) {
+                    var vertex0 = face.Vertices[i].Vertex;
+
+                    var p0 = m.Vertices[vertex0 - 1].Position.ToVector3() * scale + Vector3.One * _bitmap.Width / 2;
+
+                    var vertex1 = face.Vertices[(i + 1) % indicesCount].Vertex;
+
+                    var p1 = m.Vertices[vertex1 - 1].Position.ToVector3() * scale + Vector3.One * _bitmap.Width / 2;
+
+                    _bitmap.DrawLine(new Vector2(p0.X, p0.Y),
+                        new Vector2(p1.X, p1.Y), Color.White);
+                }
+            }
+        }
+
         private void MakeTexture(object sender, RoutedEventArgs e) {
             _bitmap = new Bitmap(Size, Size, PixelFormat.Format24bppRgb);
 
@@ -60,6 +86,9 @@ namespace practice_opengl_analogue_csharp {
                 case ActionType.DrawLines:
                     DrawLines();
                     break;
+                case ActionType.DrawModelWireframe:
+                    DrawModelWireframe();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -74,6 +103,7 @@ namespace practice_opengl_analogue_csharp {
     public enum ActionType {
         None,
         DrawDot,
-        DrawLines
+        DrawLines,
+        DrawModelWireframe
     }
 }

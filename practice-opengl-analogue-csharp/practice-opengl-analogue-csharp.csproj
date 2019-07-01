@@ -34,6 +34,10 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="JeremyAnsel.Media.WavefrontObj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6d0d0cd7fe8b54ef">
+          <HintPath>..\packages\JeremyAnsel.Media.WavefrontObj.1.0.2\lib\net40\JeremyAnsel.Media.WavefrontObj.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -42,6 +46,10 @@
         <Reference Include="System.Numerics" />
         <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Runtime.Extensions, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Runtime.Extensions.4.3.1\lib\net462\System.Runtime.Extensions.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Xml" />
@@ -57,8 +65,10 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="ConsoleAllocator.cs" />
         <Compile Include="Extensions.cs" />
         <Compile Include="ObjModel.cs" />
+        <Compile Include="Utils.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -94,7 +104,15 @@
       <Resource Include="Images\missing.jpg" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="Models\african_head.obj" />
+      <Content Include="Models\african_head.obj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Models\icosahedron.mtl">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Models\icosahedron.obj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

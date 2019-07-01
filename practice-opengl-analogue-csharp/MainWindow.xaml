@@ -11,6 +11,7 @@
             <StackPanel Orientation="Horizontal">
                 <Button Content="Dot" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawDot}"/>
                 <Button Content="Line" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawLines}"/>
+                <Button Content="Wire" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawModelWireframe}"/>
             </StackPanel>
             <Image x:Name="RenderImage" Height="512" Width="512" Source="Images/missing.jpg" HorizontalAlignment="Center"
                    VerticalAlignment="Center" />

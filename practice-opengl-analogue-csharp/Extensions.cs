@@ -2,13 +2,43 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Windows.Media.Imaging;
+using JeremyAnsel.Media.WavefrontObj;
 using practice_opengl_analogue_csharp;
 
 namespace Extensions {
+    public static class ObjFileExtensions {
+        public static Vector3 ToVector3(this ObjVector4 objVector4) {
+            return new Vector3(objVector4.X, objVector4.Y, objVector4.Z);
+        }
+
+        public static Bounds3D Bounds(this ObjFile objFile) {
+            var vertices = objFile.Vertices;
+            var minX = vertices.Min(x => x.Position.X);
+            var maxX = vertices.Max(x => x.Position.X);
+            var minY = vertices.Min(x => x.Position.Y);
+            var maxY = vertices.Max(x => x.Position.Y);
+            var minZ = vertices.Min(x => x.Position.Z);
+            var maxZ = vertices.Max(x => x.Position.Z);
+            var size = new Vector3(maxX - minX, maxY - minY, maxZ - minZ);
+            var center = new Vector3(maxX + minX, maxY + minY, maxZ + minZ) / 2;
+            return new Bounds3D(center, size);
+        }
+    }
+
+    public static class VectorExtensions {
+        public static Vector2 Clamp(this Vector2 vector2, Vector2 min, Vector2 max) {
+            var x = Utils.Clamp(min.X, max.X, vector2.X);
+            var y = Utils.Clamp(min.Y, max.Y, vector2.Y);
+            return new Vector2(x, y);
+        }
+    }
+
     public static class BitmapExtensions {
         public static BitmapImage BitmapImage(this Bitmap bitmap) {
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             using (var memory = new MemoryStream()) {
                 bitmap.Save(memory, ImageFormat.Png);
                 memory.Position = 0;
@@ -22,6 +52,10 @@ namespace Extensions {
         }
 
         public static Bitmap DrawLine(this Bitmap bitmap, Vector2 p0, Vector2 p1, Color color) {
+            var min = Vector2.Zero;
+            var max = new Vector2(bitmap.Width - 1, bitmap.Height - 1);
+            p0 = p0.Clamp(min, max);
+            p1 = p1.Clamp(min, max);
             var delta = p0 - p1;
             var steep = Math.Abs(delta.X) < Math.Abs(delta.Y);
 
