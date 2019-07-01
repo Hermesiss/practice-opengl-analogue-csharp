@@ -19,8 +19,8 @@ namespace Extensions {
                 return bitmapImage;
             }
         }
-    
-        public static Bitmap DrawLine(this Bitmap bitmap, Vector2 p0, Vector2 p1,Color color) {
+
+        public static Bitmap DrawLine(this Bitmap bitmap, Vector2 p0, Vector2 p1, Color color) {
             var delta = p0 - p1;
             var steep = Math.Abs(delta.X) < Math.Abs(delta.Y);
 
@@ -40,12 +40,22 @@ namespace Extensions {
             var y0 = (int) p0.Y;
             var y1 = (int) p1.Y;
 
+            var dx = x1 - x0;
+            var dy = y1 - y0;
+            var dError2 = Math.Abs(dy) * 2;
+            var error2 = 0;
+            var y = y0;
+
             for (var x = x0; x < x1; x++) {
-                var t = (float) (x - x0) / (x1 - x0);
-                var y = (int) (y0 * (1 - t) + y1 * t);
                 var yy = steep ? x : y;
                 var xx = steep ? y : x;
                 bitmap.SetPixel(xx, yy, color);
+
+                error2 += dError2;
+                if (error2 > dx) {
+                    y += y1 > y0 ? 1 : -1;
+                    error2 = -dx * 2;
+                }
             }
 
             return bitmap;

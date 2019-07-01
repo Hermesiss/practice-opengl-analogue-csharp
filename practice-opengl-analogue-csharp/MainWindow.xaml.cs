@@ -26,7 +26,12 @@ namespace practice_opengl_analogue_csharp {
         }
 
         private void DrawDots() {
-            for (var i = 0; i < 50; i++) _bitmap.SetPixel(_random.Next(Size), _random.Next(Size), Color.Red);
+            for (var i = 0; i < 50; i++) _bitmap.SetPixel(_random.Next(Size), _random.Next(Size), RandomColor());
+        }
+
+        private Color RandomColor() {
+            var color = Color.FromArgb(_random.Next((int) Math.Pow(2, 32) - 1));
+            return color;
         }
 
         private void DrawLines() {
@@ -34,7 +39,7 @@ namespace practice_opengl_analogue_csharp {
             _bitmap = _bitmap.DrawLine(new Vector2(134 + 5, 428), new Vector2(30 + 5, 18), Color.Red);
             for (var i = 0; i < 50; i++)
                 _bitmap = _bitmap.DrawLine(new Vector2(_random.Next(Size), _random.Next(Size)),
-                    new Vector2(_random.Next(Size), _random.Next(Size)), Color.Blue);
+                    new Vector2(_random.Next(Size), _random.Next(Size)), RandomColor());
         }
 
         private void MakeTexture(object sender, RoutedEventArgs e) {
