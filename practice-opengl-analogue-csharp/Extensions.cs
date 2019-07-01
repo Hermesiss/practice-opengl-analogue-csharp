@@ -54,8 +54,8 @@ namespace Extensions {
         public static Bitmap DrawLine(this Bitmap bitmap, Vector2 p0, Vector2 p1, Color color) {
             var min = Vector2.Zero;
             var max = new Vector2(bitmap.Width - 1, bitmap.Height - 1);
-            p0 = p0.Clamp(min, max);
-            p1 = p1.Clamp(min, max);
+            //p0 = p0.Clamp(min, max);
+            //p1 = p1.Clamp(min, max);
             var delta = p0 - p1;
             var steep = Math.Abs(delta.X) < Math.Abs(delta.Y);
 
@@ -81,15 +81,16 @@ namespace Extensions {
             var error2 = 0;
             var y = y0;
 
-            for (var x = x0; x < x1; x++) {
+            for (var x = x0; x <= x1; x++) {
                 var yy = steep ? x : y;
                 var xx = steep ? y : x;
-                bitmap.SetPixel(xx, yy, color);
+                if (xx < bitmap.Width-1 && yy < bitmap.Height-1)
+                    bitmap.SetPixel(xx, yy, color);
 
                 error2 += dError2;
                 if (error2 > dx) {
                     y += y1 > y0 ? 1 : -1;
-                    error2 = -dx * 2;
+                    error2 -= dx * 2;
                 }
             }
 

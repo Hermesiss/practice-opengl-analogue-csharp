@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
@@ -20,6 +21,8 @@ namespace practice_opengl_analogue_csharp {
         private readonly Image _image;
         private readonly Random _random = new Random();
         private Bitmap _bitmap;
+        private List<String> _stages;
+        private readonly Stopwatch _stopwatch = new Stopwatch();
 
         public MainWindow() {
             ConsoleAllocator.ShowConsoleWindow();
@@ -30,6 +33,7 @@ namespace practice_opengl_analogue_csharp {
 
         private void DrawDots() {
             for (var i = 0; i < 50; i++) _bitmap.SetPixel(_random.Next(Size), _random.Next(Size), RandomColor());
+            AddStage("Drawing");
         }
 
         private Color RandomColor() {
@@ -43,13 +47,18 @@ namespace practice_opengl_analogue_csharp {
             for (var i = 0; i < 50; i++)
                 _bitmap = _bitmap.DrawLine(new Vector2(_random.Next(Size), _random.Next(Size)),
                     new Vector2(_random.Next(Size), _random.Next(Size)), RandomColor());
+            AddStage("Drawing");
         }
 
         private void DrawModelWireframe() {
-            var m = ObjFile.FromFile("Models/icosahedron.obj");
+            var m = ObjFile.FromFile("Models/african_head.obj");
+            AddStage("Loading");
 
             var bounds = m.Bounds();
-            var scale = _bitmap.Width / bounds.BiggestSize();
+            var scale = _bitmap.Width / bounds.BiggestSize() - 8;
+            var shift = Vector3.One * _bitmap.Width / 2;
+            
+            AddStage("Bounds");
 
             foreach (var face in m.Faces) {
                 var indicesCount = face.Vertices.Count;
@@ -57,25 +66,30 @@ namespace practice_opengl_analogue_csharp {
                 for (var i = 0; i < indicesCount; i++) {
                     var vertex0 = face.Vertices[i].Vertex;
 
-                    var p0 = m.Vertices[vertex0 - 1].Position.ToVector3() * scale + Vector3.One * _bitmap.Width / 2;
+                    var p0 = m.Vertices[vertex0 - 1].Position.ToVector3();
+                    p0 *= scale;
+                    p0 += shift;
 
                     var vertex1 = face.Vertices[(i + 1) % indicesCount].Vertex;
 
-                    var p1 = m.Vertices[vertex1 - 1].Position.ToVector3() * scale + Vector3.One * _bitmap.Width / 2;
-
+                    var p1 = m.Vertices[vertex1 - 1].Position.ToVector3();
+                    p1 *= scale;
+                    p1 += shift;
+                    
                     _bitmap.DrawLine(new Vector2(p0.X, p0.Y),
                         new Vector2(p1.X, p1.Y), Color.White);
                 }
             }
+            AddStage("Drawing");
         }
 
         private void MakeTexture(object sender, RoutedEventArgs e) {
             _bitmap = new Bitmap(Size, Size, PixelFormat.Format24bppRgb);
 
             Enum.TryParse(((Button) sender).CommandParameter.ToString(), out ActionType t);
-
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            
+            _stages = new List<string>();
+            _stopwatch.Restart();
 
             switch (t) {
                 case ActionType.None:
@@ -93,10 +107,15 @@ namespace practice_opengl_analogue_csharp {
                     throw new ArgumentOutOfRangeException();
             }
 
-            TextMsBlock.Text = $"Made in {1000f * stopwatch.ElapsedTicks / Stopwatch.Frequency} ms";
-            stopwatch.Stop();
+            TextMsBlock.Text = String.Join(" ", _stages);
+            _stopwatch.Stop();
 
             _image.Source = _bitmap.BitmapImage();
+        }
+
+        private void AddStage(string stageName) {
+            _stages.Add($"{stageName}: {1000f * _stopwatch.ElapsedTicks / Stopwatch.Frequency:F2} ms");
+            _stopwatch.Restart();
         }
     }
 
