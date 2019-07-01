@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="600" Background='White'>
     <Grid>
-        <StackPanel>
+        <StackPanel Margin="6">
             <StackPanel Orientation="Horizontal">
                 <Button Content="Dot" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawDot}"/>
                 <Button Content="Line" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawLines}"/>
@@ -16,6 +16,5 @@
                    VerticalAlignment="Center" />
             <TextBlock x:Name = "TextMsBlock" HorizontalAlignment="Center" Text="0 ms"></TextBlock>
         </StackPanel>
-        
     </Grid>
 </Window>
