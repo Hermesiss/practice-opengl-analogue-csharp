@@ -9,11 +9,13 @@
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button Content="Dot" MinWidth="100" Click="newTextureBtn_Click"/>
-                <Button Content="Line" MinWidth="100" Click="DrawLineBtn_OnClickBtn_Click"/>
-            </StackPanel>    
+                <Button Content="Dot" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawDot}"/>
+                <Button Content="Line" MinWidth="100" Click="MakeTexture" CommandParameter="{x:Static local:ActionType.DrawLines}"/>
+            </StackPanel>
+            <Image x:Name="RenderImage" Height="512" Width="512" Source="Images/missing.jpg" HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+            <TextBlock x:Name = "TextMsBlock" HorizontalAlignment="Center" Text="0 ms"></TextBlock>
         </StackPanel>
-        <Image x:Name="RenderImage" Height="512" Width="512" Source="Images/missing.jpg" HorizontalAlignment="Center"
-               VerticalAlignment="Center" />
+        
     </Grid>
 </Window>
