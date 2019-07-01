@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Numerics;
 using System.Windows.Media.Imaging;
 using practice_opengl_analogue_csharp;
 
