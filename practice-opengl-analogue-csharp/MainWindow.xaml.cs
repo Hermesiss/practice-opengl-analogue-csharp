@@ -32,8 +32,12 @@ namespace practice_opengl_analogue_csharp {
         }
 
         private void DrawDots() {
-            for (var i = 0; i < 50; i++) _bitmap.SetPixel(_random.Next(Size), _random.Next(Size), RandomColor());
+            for (var i = 0; i < 50; i++) _bitmap.SetPixel(RandInsideTexture(), RandInsideTexture(), RandomColor());
             AddStage("Drawing");
+        }
+
+        private int RandInsideTexture() {
+            return _random.Next(Size);
         }
 
         private Color RandomColor() {
@@ -103,6 +107,9 @@ namespace practice_opengl_analogue_csharp {
                 case ActionType.DrawModelWireframe:
                     DrawModelWireframe();
                     break;
+                case ActionType.DrawTriangles:
+                    DrawTriangles();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -111,6 +118,26 @@ namespace practice_opengl_analogue_csharp {
             _stopwatch.Stop();
 
             _image.Source = _bitmap.BitmapImage();
+        }
+
+        private void DrawTriangles() {
+            var triCount = _random.Next(3) + 1;
+            for (int i = 0; i < triCount; i++) {
+                var points = new Vector2[] {
+                    new Vector2(RandInsideTexture(), RandInsideTexture()),
+                    new Vector2(RandInsideTexture(), RandInsideTexture()),
+                    new Vector2(RandInsideTexture(), RandInsideTexture())
+                };
+                var colors = new Color[_random.Next(2) + 1];
+
+                for (var j = 0; j < colors.Length; j++) {
+                    colors[j] = RandomColor();
+                }
+
+                _bitmap.DrawTriangle(points, colors);
+            }
+
+            AddStage("Drawing");
         }
 
         private void AddStage(string stageName) {
@@ -123,6 +150,7 @@ namespace practice_opengl_analogue_csharp {
         None,
         DrawDot,
         DrawLines,
-        DrawModelWireframe
+        DrawModelWireframe,
+        DrawTriangles
     }
 }
