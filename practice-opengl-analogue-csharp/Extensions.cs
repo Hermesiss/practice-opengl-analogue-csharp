@@ -51,17 +51,15 @@ namespace Extensions {
             }
         }
 
-        public static Bitmap DrawTriangle(this Bitmap bitmap, Vector2[] points, Color[] colors) {
+        public static void DrawTriangle(this Bitmap bitmap, Vector2[] points, Color[] colors) {
             var pLength = points.Length;
             if (pLength != 3) throw new ArgumentException($"Passed {pLength} points instead of 3");
             for (var i = 0; i < pLength; i++) {
-                bitmap = bitmap.DrawLine(points[i], points[(i + 1) % pLength], colors[i % colors.Length]);
+                bitmap.DrawLine(points[i], points[(i + 1) % pLength], colors[i % colors.Length]);
             }
-
-            return bitmap;
         }
 
-        public static Bitmap DrawLine(this Bitmap bitmap, Vector2 p0, Vector2 p1, Color color) {
+        public static void DrawLine(this Bitmap bitmap, Vector2 p0, Vector2 p1, Color color) {
             var min = Vector2.Zero;
             var max = new Vector2(bitmap.Width - 1, bitmap.Height - 1);
             //p0 = p0.Clamp(min, max);
@@ -103,8 +101,6 @@ namespace Extensions {
                     error2 -= dx * 2;
                 }
             }
-
-            return bitmap;
         }
     }
 }

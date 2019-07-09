@@ -46,10 +46,10 @@ namespace practice_opengl_analogue_csharp {
         }
 
         private void DrawLines() {
-            _bitmap = _bitmap.DrawLine(new Vector2(30, 18), new Vector2(134, 428), Color.Green);
-            _bitmap = _bitmap.DrawLine(new Vector2(134 + 5, 428), new Vector2(30 + 5, 18), Color.Red);
+            _bitmap.DrawLine(new Vector2(30, 18), new Vector2(134, 428), Color.Green);
+            _bitmap.DrawLine(new Vector2(134 + 5, 428), new Vector2(30 + 5, 18), Color.Red);
             for (var i = 0; i < 50; i++)
-                _bitmap = _bitmap.DrawLine(new Vector2(_random.Next(Size), _random.Next(Size)),
+                _bitmap.DrawLine(new Vector2(_random.Next(Size), _random.Next(Size)),
                     new Vector2(_random.Next(Size), _random.Next(Size)), RandomColor());
             AddStage("Drawing");
         }
@@ -123,16 +123,16 @@ namespace practice_opengl_analogue_csharp {
         private void DrawTriangles() {
             var triCount = _random.Next(3) + 1;
             for (int i = 0; i < triCount; i++) {
-                var points = new Vector2[] {
+                var points = new[] {
                     new Vector2(RandInsideTexture(), RandInsideTexture()),
                     new Vector2(RandInsideTexture(), RandInsideTexture()),
                     new Vector2(RandInsideTexture(), RandInsideTexture())
                 };
-                var colors = new Color[_random.Next(2) + 1];
-
-                for (var j = 0; j < colors.Length; j++) {
-                    colors[j] = RandomColor();
-                }
+                var colors = new[] {
+                    Color.Red,
+                    Color.Green, 
+                    Color.Blue
+                };
 
                 _bitmap.DrawTriangle(points, colors);
             }
